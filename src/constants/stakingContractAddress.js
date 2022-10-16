@@ -1,2 +1,2 @@
-export const stakingContractAddress = '0x8C4db91827F916a0C141e71ebC2F4436abFa408f'
+export const stakingContractAddress = '0x3F2701C84989CcfECA0480aa4484295A7D060962'
 export const nftContractAddress = '0x6928d682911c068fbbcaeb1a409b9ab34fabfb91'

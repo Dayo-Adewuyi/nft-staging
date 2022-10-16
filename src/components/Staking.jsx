@@ -14,8 +14,6 @@ import '../assets/css/staking.css'
 
 const Staking = () => {
 
-
-
   const settings = {
     apiKey: "0AhEi7ZgISHTLrreg8I-AxOfdmhLzRhC", // Replace with your Alchemy API Key.
     network: Network.ETH_MAINNET, // Replace with your network.
@@ -27,6 +25,7 @@ const Staking = () => {
   const [tokenStaked, setTokenStaked] = useState();
   const [arrOfStakedTokens, setArrOfStakedTokens] = useState([]);
   const [userNfts, setUserNfts] = useState([])
+  const [allNfts, setAllNfts] = useState([])
   const { ethereum } = window;
 
   const stakingContract = () => {
@@ -51,6 +50,18 @@ const Staking = () => {
   const [cart, setCart] = useState([]);
   //push to cart function
   const pushToCart = (tokenId) => {
+    //check that the token is not already in the cart
+    if (cart.includes(tokenId)) {
+      return toast.error("Token already in cart", {
+        position: "bottom-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
     setCart([...cart, tokenId])
   }
   //stake all in cart function
@@ -84,6 +95,7 @@ const Staking = () => {
         })
 
         getAllUserNft();
+        getAllNft();
       }
     } catch (error) {
       console.log(error);
@@ -95,6 +107,7 @@ const Staking = () => {
       await NFTContract.setApprovalForAll(stakingContractAddress, true);
     } catch (error) {
       console.log(error);
+      toast.error('Something went wrong, try again');
     }
   }
 
@@ -133,7 +146,7 @@ const Staking = () => {
     }
     catch (error) {
       console.log(error)
-
+      toast.error('Something went wrong, try again');
     }
 
   }
@@ -146,11 +159,17 @@ const Staking = () => {
 
   }
 
+  const getAllNft = async () => {
+    const nfts = (await alchemy.nft.getNftsForOwner(stakingContractAddress)).ownedNfts
+    const allStakedNft = nfts.filter(obj => obj.contract.address === '0x6928d682911c068fbbcaeb1a409b9ab34fabfb91')
+    setAllNfts(allStakedNft)
+  }
   // Asynchronous functions inside useEffect to fetch user's NFTs
   useEffect(async () => {
     if (account) {
       getUsersNFTandRewardsInfo();
       getUserStakedNft();
+      getAllNft()
     }
 
   }, [account])
@@ -160,14 +179,17 @@ const Staking = () => {
 
   //check all usernfts tokenID in the stakerAddress mapping to check if they're staked
   //if they are, push them to the arrOfStakedTokens state
+
+  //check all usernfts tokenID in the stakerAddress mapping to check if they're staked
+  //if they are, push them to the arrOfStakedTokens state
   const getUserStakedNft = async () => {
     const cleanNft = [];
 
     try {
-      for (let i = 0; i < userNfts; i++) {
-        const result = await STKContract.stakerAddress(userNfts[i].tokenId)
+      for (let i = 0; i < allNfts.length; i++) {
+        const result = await STKContract.stakerAddress(allNfts[i].tokenId)
         if (result === account) {
-          cleanNft.push(userNfts[i].tokenId);
+          cleanNft.push(allNfts[i].tokenId);
         }
       };
 
@@ -252,7 +274,7 @@ const Staking = () => {
     try {
       let tx = await STKContract.claimRewards();
       let receipt = await tx.wait()
-      if (receipt) {
+      if (receipt.status === 1) {
         toast.success('Rewards Claimed successfully!', {
           position: "bottom-center",
           autoClose: 5000,
