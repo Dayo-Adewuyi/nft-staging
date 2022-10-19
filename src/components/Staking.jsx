@@ -107,7 +107,15 @@ const Staking = () => {
       await NFTContract.setApprovalForAll(stakingContractAddress, true);
     } catch (error) {
       console.log(error);
-      toast.error('Something went wrong, try again');
+      toast.error('Something went wrong, try again', {
+        position: "bottom-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   }
 
@@ -146,7 +154,15 @@ const Staking = () => {
     }
     catch (error) {
       console.log(error)
-      toast.error('Something went wrong, try again');
+      toast.error('Something went wrong, try again', {
+        position: "bottom-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
 
   }
@@ -285,7 +301,7 @@ const Staking = () => {
           progress: undefined,
         })
       }
-
+      userStakedNftsInfo()
     }
     catch (error) {
       console.log(error)
