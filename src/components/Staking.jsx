@@ -218,6 +218,43 @@ const Staking = () => {
       setArrOfStakedTokens([]);
     }
   }
+
+  const unstakeAllNft = async () => {
+
+    try {
+
+      let tx = await STKContract.withdraw(arrOfStakedTokens);
+      let receipt = await tx.wait()
+      if (receipt.status === 1) {
+
+        toast.success('NFT unstaked successfully!', {
+          position: "bottom-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+
+      }
+
+
+    }
+    catch (error) {
+      console.log(error);
+      toast.error("You have no NFT staked", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+
+    }
+  }
   /**Function to stake a single nft, push token id into an array, check if approved, then stake */
   const stakeNft = async (tokenId) => {
     let approvedToken = []
@@ -349,6 +386,11 @@ const Staking = () => {
                   <button className="staking--btn" onClick={() => getReward()} >
                     <h3>
                       Claim Rewards
+                    </h3>
+                  </button>
+                  <button className="staking--btn" onClick={() => unstakeAllNft()} >
+                    <h3>
+                      Withdraw All NFT
                     </h3>
                   </button>
 
