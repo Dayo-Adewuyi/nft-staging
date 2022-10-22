@@ -96,6 +96,7 @@ const Staking = () => {
 
         getAllUserNft();
         getAllNft();
+        getUserStakedNft();
       }
     } catch (error) {
       console.log(error);
@@ -223,19 +224,22 @@ const Staking = () => {
 
     try {
 
-      let tx = await STKContract.withdraw(arrOfStakedTokens);
-      let receipt = await tx.wait()
-      if (receipt.status === 1) {
+      if (arrOfStakedTokens) {
+        let tx = await STKContract.withdraw(arrOfStakedTokens);
+        let receipt = await tx.wait()
+        if (receipt.status === 1) {
 
-        toast.success('NFT unstaked successfully!', {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+          toast.success('NFT unstaked successfully!', {
+            position: "bottom-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+
+        }
 
       }
 
