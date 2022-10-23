@@ -224,7 +224,7 @@ const Staking = () => {
 
     try {
 
-      if (arrOfStakedTokens) {
+      if (arrOfStakedTokens.length > 0) {
         let tx = await STKContract.withdraw(arrOfStakedTokens);
         let receipt = await tx.wait()
         if (receipt.status === 1) {
