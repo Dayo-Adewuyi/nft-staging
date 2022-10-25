@@ -178,8 +178,8 @@ const Staking = () => {
 
   const getAllNft = async () => {
     const nfts = (await alchemy.nft.getNftsForOwner(stakingContractAddress)).ownedNfts
-    const allStakedNft = nfts.filter(obj => obj.contract.address === '0x6928d682911c068fbbcaeb1a409b9ab34fabfb91')
-    setAllNfts(allStakedNft)
+    
+    setAllNfts(nfts)
   }
   // Asynchronous functions inside useEffect to fetch user's NFTs
   useEffect(async () => {
@@ -191,9 +191,7 @@ const Staking = () => {
 
   }, [account])
 
-
-
-
+ 
   //check all usernfts tokenID in the stakerAddress mapping to check if they're staked
   //if they are, push them to the arrOfStakedTokens state
 
